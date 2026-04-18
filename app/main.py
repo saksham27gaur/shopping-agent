@@ -5,4 +5,15 @@ app = FastAPI()
 
 @app.get("/search")
 def search(q: str):
-    return run_agent(q)
+    data = run_agent(q)
+
+    return {
+        "query": q,
+        "summary": data.get("summary", "No response"),
+        "top_products": data.get("products", []),
+        "agent_steps": data.get("steps", "")
+    }
+
+
+def format_summary(text):
+    return text.replace("**", "").strip()
